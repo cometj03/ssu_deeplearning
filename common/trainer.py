@@ -1,9 +1,10 @@
 # coding: utf-8
 import sys
+
 sys.path.append('..')
 import numpy
 import time
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 from common.np import *  # import numpy as np
 from common.util import clip_grads
 
@@ -32,8 +33,8 @@ class Trainer:
             t = t[idx]
 
             for iters in range(max_iters):
-                batch_x = x[iters*batch_size:(iters+1)*batch_size]
-                batch_t = t[iters*batch_size:(iters+1)*batch_size]
+                batch_x = x[iters * batch_size:(iters + 1) * batch_size]
+                batch_t = t[iters * batch_size:(iters + 1) * batch_size]
 
                 # 기울기 구해 매개변수 갱신
                 loss = model.forward(batch_x, batch_t)
@@ -56,16 +57,16 @@ class Trainer:
 
             self.current_epoch += 1
 
-    def plot(self, ylim=None):
-        x = numpy.arange(len(self.loss_list))
-        if ylim is not None:
-            plt.ylim(*ylim)
-        plt.plot(x, self.loss_list, label='train')
-        plt.xlabel('Iteration (x' + str(self.eval_interval) + ')')
-        #plt.xlabel('반복 (x' + str(self.eval_interval) + ')')
-        plt.ylabel('Loss')
-        #plt.ylabel('손실')
-        plt.show()
+    # def plot(self, ylim=None):
+    #     x = numpy.arange(len(self.loss_list))
+    #     if ylim is not None:
+    #         plt.ylim(*ylim)
+    #     plt.plot(x, self.loss_list, label='train')
+    #     plt.xlabel('Iteration (x' + str(self.eval_interval) + ')')
+    #     #plt.xlabel('반복 (x' + str(self.eval_interval) + ')')
+    #     plt.ylabel('Loss')
+    #     #plt.ylabel('손실')
+    #     plt.show()
 
 
 class RnnlmTrainer:
@@ -129,16 +130,16 @@ class RnnlmTrainer:
 
             self.current_epoch += 1
 
-    def plot(self, ylim=None):
-        x = numpy.arange(len(self.ppl_list))
-        if ylim is not None:
-            plt.ylim(*ylim)
-        plt.plot(x, self.ppl_list, label='train')
-        plt.xlabel('Iteration (x' + str(self.eval_interval) + ')')
-        #plt.xlabel('반복 (x' + str(self.eval_interval) + ')')
-        plt.ylabel('perplexity')
-        #plt.ylabel('퍼플렉서티')
-        plt.show()
+    # def plot(self, ylim=None):
+    #     x = numpy.arange(len(self.ppl_list))
+    #     if ylim is not None:
+    #         plt.ylim(*ylim)
+    #     plt.plot(x, self.ppl_list, label='train')
+    #     plt.xlabel('Iteration (x' + str(self.eval_interval) + ')')
+    #     #plt.xlabel('반복 (x' + str(self.eval_interval) + ')')
+    #     plt.ylabel('perplexity')
+    #     #plt.ylabel('퍼플렉서티')
+    #     plt.show()
 
 
 def remove_duplicate(params, grads):
@@ -162,7 +163,7 @@ def remove_duplicate(params, grads):
                     grads.pop(j)
                 # 가중치를 전치행렬로 공유하는 경우(weight tying)
                 elif params[i].ndim == 2 and params[j].ndim == 2 and \
-                     params[i].T.shape == params[j].shape and np.all(params[i].T == params[j]):
+                        params[i].T.shape == params[j].shape and np.all(params[i].T == params[j]):
                     grads[i] += grads[j].T
                     find_flg = True
                     params.pop(j)
