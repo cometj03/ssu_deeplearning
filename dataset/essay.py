@@ -49,6 +49,7 @@ def _load_text(data_type: str = "train"):
 
         s = essay_dict["paragraph"][0]["paragraph_txt"]
         strs.append(s)
+        # TODO 문단 구분?
     total_str = "".join(strs)
 
     with open(file_path, "w", encoding="utf-8") as f:
