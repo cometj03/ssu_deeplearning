@@ -4,7 +4,7 @@ import sys
 sys.path.append('..')
 import numpy
 import time
-# import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt
 from common.np import *  # import numpy as np
 from common.util import clip_grads
 
@@ -57,16 +57,16 @@ class Trainer:
 
             self.current_epoch += 1
 
-    # def plot(self, ylim=None):
-    #     x = numpy.arange(len(self.loss_list))
-    #     if ylim is not None:
-    #         plt.ylim(*ylim)
-    #     plt.plot(x, self.loss_list, label='train')
-    #     plt.xlabel('Iteration (x' + str(self.eval_interval) + ')')
-    #     #plt.xlabel('반복 (x' + str(self.eval_interval) + ')')
-    #     plt.ylabel('Loss')
-    #     #plt.ylabel('손실')
-    #     plt.show()
+    def plot(self, ylim=None):
+        x = numpy.arange(len(self.loss_list))
+        if ylim is not None:
+            plt.ylim(*ylim)
+        plt.plot(x, self.loss_list, label='train')
+        plt.xlabel('Iteration (x' + str(self.eval_interval) + ')')
+        #plt.xlabel('반복 (x' + str(self.eval_interval) + ')')
+        plt.ylabel('Loss')
+        #plt.ylabel('손실')
+        plt.show()
 
 
 class RnnlmTrainer:
@@ -130,16 +130,16 @@ class RnnlmTrainer:
 
             self.current_epoch += 1
 
-    # def plot(self, ylim=None):
-    #     x = numpy.arange(len(self.ppl_list))
-    #     if ylim is not None:
-    #         plt.ylim(*ylim)
-    #     plt.plot(x, self.ppl_list, label='train')
-    #     plt.xlabel('Iteration (x' + str(self.eval_interval) + ')')
-    #     #plt.xlabel('반복 (x' + str(self.eval_interval) + ')')
-    #     plt.ylabel('perplexity')
-    #     #plt.ylabel('퍼플렉서티')
-    #     plt.show()
+    def plot(self, ylim=None):
+        x = numpy.arange(len(self.ppl_list))
+        if ylim is not None:
+            plt.ylim(*ylim)
+        plt.plot(x, self.ppl_list, label='train')
+        plt.xlabel('Iteration (x' + str(self.eval_interval) + ')')
+        #plt.xlabel('반복 (x' + str(self.eval_interval) + ')')
+        plt.ylabel('perplexity')
+        #plt.ylabel('퍼플렉서티')
+        plt.show()
 
 
 def remove_duplicate(params, grads):

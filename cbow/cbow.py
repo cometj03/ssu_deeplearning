@@ -1,8 +1,8 @@
 # coding: utf-8
 
 from common.layers import Embedding
-from common.np import *  # import numpy as np
-from layer.negative_sampling_layer import NegativeSamplingLoss
+import numpy as np
+from cbow.negative_sampling_layer import NegativeSamplingLoss
 
 
 class CBOW:

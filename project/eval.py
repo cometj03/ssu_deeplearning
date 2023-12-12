@@ -5,7 +5,8 @@ sys.path.append('..')
 from common.util import most_similar, analogy
 import pickle
 
-pkl_file = 'cbow_params.pkl'
+pkl_file = "essay_cbow_params.pkl"
+# pkl_file = 'cbow_params.pkl'
 # pkl_file = 'skipgram_params.pkl'
 
 with open(pkl_file, 'rb') as f:

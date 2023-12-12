@@ -1,8 +1,10 @@
 # coding: utf-8
 import sys
 
+from common.config import GPU
+
 sys.path.append('..')
-from common.np import *  # import numpy as np
+import numpy as np
 from common.layers import Embedding, SigmoidWithLoss
 import collections
 
