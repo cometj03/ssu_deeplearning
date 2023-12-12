@@ -3,17 +3,17 @@ import pickle
 
 import numpy as np
 
+from cbow.cbow import CBOW
 from common.optimizer import Adam
 from common.trainer import Trainer
 from common.util import create_contexts_target
 from dataset import essay
-from cbow.cbow import CBOW
 
 # 하이퍼파라미터 설정
 window_size = 5
 hidden_size = 100
 batch_size = 100
-max_epoch = 1
+max_epoch = 2
 
 if __name__ == '__main__':
     # 데이터 읽기
@@ -24,7 +24,6 @@ if __name__ == '__main__':
 
     # 모델 등 생성
     model = CBOW(vocab_size, hidden_size, window_size, corpus)
-    # model = SkipGram(vocab_size, hidden_size, window_size, corpus)
     optimizer = Adam()
     trainer = Trainer(model, optimizer)
 
