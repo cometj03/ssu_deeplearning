@@ -79,7 +79,7 @@ def load_data(data_type='train', renew=False):
 
     print("토크나이징 중")
     kkma = Kkma()
-    words = open(file_path, encoding="utf-8").read().replace('#@문장구분#', '<eos>').strip()
+    words = open(file_path, encoding="utf-8").read().replace('#@문장구분#', '##').strip()
     words = kkma.morphs(words)
 
     for i, word in enumerate(words):

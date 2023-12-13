@@ -5,7 +5,7 @@ from common.layers import MatMul, SoftmaxWithLoss
 
 
 class SimpleCBOW:
-    def __init__(self, vocab_size, hidden_size):
+    def __init__(self, vocab_size, hidden_size, enable_loss_layer=True):
         V, H = vocab_size, hidden_size
 
         # 가중치 초기화
@@ -16,7 +16,7 @@ class SimpleCBOW:
         self.in_layer0 = MatMul(W_in)
         self.in_layer1 = MatMul(W_in)
         self.out_layer = MatMul(W_out)
-        self.loss_layer = SoftmaxWithLoss()
+        self.loss_layer = SoftmaxWithLoss() if enable_loss_layer else None
 
         # 모든 가중치와 기울기를 리스트에 모은다.
         layers = [self.in_layer0, self.in_layer1, self.out_layer]
@@ -29,17 +29,20 @@ class SimpleCBOW:
         self.word_vecs = W_in
 
     def forward(self, contexts, target):
-        h0 = self.in_layer0.forward(contexts[:, 0])
-        h1 = self.in_layer1.forward(contexts[:, 1])
+        h0 = self.in_layer0.forward(contexts[0])
+        h1 = self.in_layer1.forward(contexts[1])
         h = (h0 + h1) * 0.5
         score = self.out_layer.forward(h)
+        if self.loss_layer is None:
+            return score
         loss = self.loss_layer.forward(score, target)
         return loss
 
     def backward(self, dout=1):
-        ds = self.loss_layer.backward(dout)
-        da = self.out_layer.backward(ds)
+        if self.loss_layer is not None:
+            dout = self.loss_layer.backward(dout)
+        da = self.out_layer.backward(dout)
         da *= 0.5
-        self.in_layer1.backward(da)
-        self.in_layer0.backward(da)
-        return None
+        d1 = self.in_layer1.backward(da)
+        d0 = self.in_layer0.backward(da)
+        return d0, d1

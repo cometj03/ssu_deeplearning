@@ -27,18 +27,28 @@ def create_context_target_sentences(corpus, eos_id, window_size=1):
     :param window_size: 윈도우 크기(윈도우 크기가 1이면 타깃 단어 좌우 한 단어씩이 맥락에 포함)
     :return:
     """
-    corpus = split(corpus, eos_id)
-    target = corpus[window_size:-window_size]
+    sentences = split(corpus, eos_id)
+    maxlen = max(map(lambda x: len(x), sentences)) + 1
+    target = sentences[window_size:-window_size]
     contexts = []
 
-    for idx in range(window_size, len(corpus) - window_size):
+    for idx in range(window_size, len(sentences) - window_size):
         cs = []
         for t in range(-window_size, window_size + 1):
             if t == 0:
                 continue
-            cs.append(corpus[idx + t])
+            s = sentences[idx + t]
+            cs.append([eos_id] * (maxlen - len(s)) + s.tolist() + [eos_id])
         contexts.append(cs)
-    return contexts, target
+    return np.array(contexts), fill_front_padding(target, eos_id)
+
+def fill_front_padding(arr, blank):
+    maxlen = max(map(lambda x: len(x), arr)) + 1
+    new_arr = []
+    for a in arr:
+        s = [blank] + a.tolist() + [blank] * (maxlen - len(a))
+        new_arr.append(s)
+    return np.array(new_arr)
 
 
 if __name__ == '__main__':

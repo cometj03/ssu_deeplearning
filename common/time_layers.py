@@ -51,7 +51,7 @@ class TimeRNN:
         D, H = Wx.shape
 
         self.layers = []
-        hs = np.empty((N, T, H), dtype='f')
+        # hs = np.empty((N, T, H), dtype='f')
 
         if not self.stateful or self.h is None:
             self.h = np.zeros((N, H), dtype='f')
@@ -59,12 +59,15 @@ class TimeRNN:
         for t in range(T):
             layer = RNN(*self.params)
             self.h = layer.forward(xs[:, t, :], self.h)
-            hs[:, t, :] = self.h
+            # hs[:, t, :] = self.h
             self.layers.append(layer)
 
-        return hs
+        # return hs
+        return self.h
 
     def backward(self, dhs):
+        print("time rnn backward dhs")
+        print(dhs.shape)
         Wx, Wh, b = self.params
         N, T, H = dhs.shape
         D, H = Wx.shape
@@ -256,7 +259,7 @@ class TimeEmbedding:
             grad += layer.grads[0]
 
         self.grads[0][...] = grad
-        return None
+        return grad
 
 
 class TimeAffine:

@@ -66,7 +66,8 @@ class Trainer:
         #plt.xlabel('반복 (x' + str(self.eval_interval) + ')')
         plt.ylabel('Loss')
         #plt.ylabel('손실')
-        plt.show()
+        # plt.show()
+        plt.savefig("fig1.png")
 
 
 class RnnlmTrainer:
