@@ -9,8 +9,6 @@ if __name__ == '__main__':
     cbow_hidden_size = 30
     encoder_hidden_size = 100
     decoder_hidden_size = 100
-    batch_size = 30
-    max_epoch = 1
 
     # 데이터 읽기
     corpus, word_to_id, id_to_word = essay.load_data('train')
@@ -26,5 +24,5 @@ if __name__ == '__main__':
 
     model = CBOW_RNN(vocab_size, wordvec_size, pretrained_param=pretrained_param)
     text = model.generate(contexts[0], eos, 10)
-    test = [id_to_word[t] for t in text]
+    test = [id_to_word[t] for t in text if t != eos]
     print(text)

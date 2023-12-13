@@ -20,7 +20,7 @@ if __name__ == '__main__':
     encoder_hidden_size = 100
     decoder_hidden_size = 100
     batch_size = 30
-    max_epoch = 2
+    max_epoch = 1
 
     # 데이터 읽기
     corpus, word_to_id, id_to_word = essay.load_data('train')
@@ -46,6 +46,7 @@ if __name__ == '__main__':
     params["cbow_hidden"] = cbow_hidden_size
     params["encoder_hidden"] = encoder_hidden_size
     params["decoder_hidden"] = decoder_hidden_size
+    params["wordvec_size"] = wordvec_size
     with open(pkl_file, 'wb') as f:
         pickle.dump(params, f, -1)
 
