@@ -28,7 +28,8 @@ def create_context_target_sentences(corpus, eos_id, window_size=1):
     :return:
     """
     sentences = split(corpus, eos_id)
-    maxlen = max(map(lambda x: len(x), sentences)) + 1
+    sentences = fill_front_padding(sentences, eos_id)
+
     target = sentences[window_size:-window_size]
     contexts = []
 
@@ -37,10 +38,27 @@ def create_context_target_sentences(corpus, eos_id, window_size=1):
         for t in range(-window_size, window_size + 1):
             if t == 0:
                 continue
-            s = sentences[idx + t]
-            cs.append([eos_id] * (maxlen - len(s)) + s.tolist() + [eos_id])
+            cs.append(sentences[idx + t])
         contexts.append(cs)
-    return np.array(contexts), fill_front_padding(target, eos_id)
+    return np.array(contexts), target
+
+
+def create_context_target_sentences2(corpus, eos_id):
+    """문장 단위의 맥락(앞 두 문장)과 타깃 생성
+
+    :param corpus: 말뭉치(단어 ID 목록)
+    :param eos_id: eos(end of sentence)를 나타내는 아이디
+    :return:
+    """
+    sentences = split(corpus, eos_id)
+    sentences = fill_front_padding(sentences, eos_id)
+
+    target = sentences[2:]
+    contexts = []
+
+    for idx in range(2, len(sentences)):
+        contexts.append(sentences[idx-2:idx])
+    return np.array(contexts), target
 
 def fill_front_padding(arr, blank):
     maxlen = max(map(lambda x: len(x), arr)) + 1

@@ -67,7 +67,7 @@ class Trainer:
         plt.ylabel('Loss')
         #plt.ylabel('손실')
         # plt.show()
-        plt.savefig("fig1.png")
+        plt.savefig("fig1_ex.png")
 
 
 class RnnlmTrainer:

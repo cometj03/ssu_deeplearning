@@ -7,22 +7,16 @@ from common.time_layers import TimeRNN, TimeEmbedding, TimeSoftmaxWithLoss, Time
 
 class CBOW_RNN:
     def __init__(self, vocab_size, wordvec_size,
-                 cbow_hidden_size, in_rnn_hidden_size, decoder_hidden_size):
-        IH, CH = in_rnn_hidden_size, cbow_hidden_size
+                 cbow_hidden_size=30, encoder_hidden_size=100, decoder_hidden_size=100,
+                 pretrained_param=None):
+        IH, CH = encoder_hidden_size, cbow_hidden_size
         V, D = vocab_size, wordvec_size
-        rn = np.random.randn
-
-        # in_rnn 가중치 초기화
-        in_embed_W = (rn(V, D) / 100).astype('f')
-        in_rnn_Wx = (rn(D, IH) / np.sqrt(D)).astype('f')
-        in_rnn_Wh = (rn(IH, IH) / np.sqrt(IH)).astype('f')
-        in_rnn_b = np.zeros(IH).astype('f')
 
         # self.word_vecs = word_vecs # embedding 대신 word_vec 사용
         self.encoder0 = Encoder(V, D, IH)
         self.encoder1 = Encoder(V, D, IH)
         self.cbow = SimpleCBOW(IH, CH, enable_loss_layer=False)
-        self.decoder = Decoder(vocab_size, wordvec_size, decoder_hidden_size)
+        self.decoder = Decoder(V, D, decoder_hidden_size)
 
         self.softmax = TimeSoftmaxWithLoss()
 
@@ -31,6 +25,10 @@ class CBOW_RNN:
         for layer in layers:
             self.params += layer.params
             self.grads += layer.grads
+
+        if pretrained_param is not None:
+            for i, param in enumerate(self.params):
+                param[...] = pretrained_param[i]
 
     def forward(self, contexts, target):
         """
@@ -59,4 +57,10 @@ class CBOW_RNN:
         d0 = self.encoder0.backward(d0)
         return d0, d1
 
+    def generate(self, contexts, start_id, sample_size):
+        xs0, xs1 = contexts[:, 0, :], contexts[:, 1, :]
+        xs0 = self.encoder0.forward(xs0)
+        xs1 = self.encoder1.forward(xs1)
 
+        h = self.cbow.forward(np.array([xs0, xs1]), None)
+        return self.decoder.generate(h, start_id, sample_size)
