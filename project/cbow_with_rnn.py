@@ -1,11 +1,12 @@
 import numpy as np
 
 from cbow.simple_cbow import SimpleCBOW
+from common.base_model import BaseModel
 from rnn.seq2seq import Decoder, Encoder
 from common.time_layers import TimeRNN, TimeEmbedding, TimeSoftmaxWithLoss, TimeAffine
 
 
-class CBOW_RNN:
+class CBOW_RNN(BaseModel):
     def __init__(self, vocab_size, wordvec_size,
                  cbow_hidden_size=30, encoder_hidden_size=100, decoder_hidden_size=100,
                  pretrained_param=None):
